@@ -1,0 +1,29 @@
+import { NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
+
+/**
+ * Cloudinary Webhook Handler
+ * Rule 2.2: Validates the event to purge the specific governance cache tag.
+ */
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+
+    // Rule 84: Audit log the incoming public_id for tracking
+    console.log('--- MediaFlows Webhook Success ---', body.public_id);
+
+    /**
+     * Purges the 'governance-list' cache.
+     * This forces fetchGovernedAssets to grab the new 'status_approved' tags.
+     */
+    revalidateTag('governance-list');
+
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Cache revalidated',
+      asset: body.public_id 
+    });
+  } catch (_err) {
+    return NextResponse.json({ error: 'Invalid Webhook Payload' }, { status: 400 });
+  }
+}

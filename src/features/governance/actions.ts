@@ -2,15 +2,11 @@
 
 import cloudinary from '@/lib/cloudinary';
 import { GovernedAsset } from './types';
-import { unstable_noStore as noStore } from 'next/cache';
+import { cacheTag } from 'next/cache'; // Rule 26: Precise revalidation
 
-/**
- * Action: Fetches audited assets using the high-performance Search API.
- * Rule 2.2: Bypasses cache to ensure polling detects MediaFlows updates.
- * @returns {Promise<GovernedAsset[]>}
- */
 export async function fetchGovernedAssets(): Promise<GovernedAsset[]> {
-    noStore();
+    'use cache';
+    cacheTag('governance-list'); // Matches the tag in the webhook
 
     try {
         const response = await cloudinary.search
@@ -22,7 +18,6 @@ export async function fetchGovernedAssets(): Promise<GovernedAsset[]> {
 
         return response.resources as GovernedAsset[];
     } catch {
-        // Rule 82: Graceful degradation (removed unused error variable)
         return [];
     }
 }
