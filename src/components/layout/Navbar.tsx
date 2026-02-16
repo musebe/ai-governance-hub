@@ -1,10 +1,6 @@
 import { ShieldCheck, Github } from 'lucide-react';
 import Link from 'next/link';
 
-/**
- * Global navigation bar with glassmorphism styling.
- * Uses static hoisting for clean architectural separation.
- */
 export default function Navbar() {
   return (
     <nav className='sticky top-0 z-50 border-b border-slate-800 bg-slate-950/50 backdrop-blur-md'>
@@ -17,14 +13,17 @@ export default function Navbar() {
         </Link>
 
         <div className='flex items-center gap-6'>
-          <Link
-            href='/docs'
+          <a
+            href='https://cloudinary.com/documentation/mediaflows_powerflows'
+            target='_blank'
+            rel='noreferrer'
             className='text-slate-400 hover:text-white text-sm transition-colors'
           >
             Documentation
-          </Link>
+          </a>
+
           <a
-            href='https://github.com'
+            href='https://github.com/musebe/ai-governance-hub'
             target='_blank'
             rel='noreferrer'
             className='p-2 bg-slate-800 rounded-full hover:bg-slate-700 transition-all'
